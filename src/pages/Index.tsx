@@ -1,17 +1,19 @@
 import { Shader, ChromaFlow, Swirl } from "shaders/react"
 import { CustomCursor } from "@/components/custom-cursor"
 import { GrainOverlay } from "@/components/grain-overlay"
-import { WorkSection } from "@/components/sections/work-section"
-import { ServicesSection } from "@/components/sections/services-section"
+import { CatalogSection } from "@/components/sections/work-section"
+import { MoodsSection } from "@/components/sections/services-section"
 import { AboutSection } from "@/components/sections/about-section"
 import { ContactSection } from "@/components/sections/contact-section"
 import { MagneticButton } from "@/components/magnetic-button"
 import { useRef, useEffect, useState } from "react"
+import Icon from "@/components/ui/icon"
 
 export default function Index() {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [currentSection, setCurrentSection] = useState(0)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
   const touchStartY = useRef(0)
   const touchStartX = useRef(0)
   const shaderContainerRef = useRef<HTMLDivElement>(null)
@@ -170,11 +172,14 @@ export default function Index() {
     }
   }, [currentSection])
 
+  const navItems = ["Главная", "Каталог", "Настроение", "О магазине", "Контакты"]
+
   return (
     <main className="relative h-screen w-full overflow-hidden bg-background">
       <CustomCursor />
       <GrainOverlay />
 
+      {/* WebGL background — warm paper tones */}
       <div
         ref={shaderContainerRef}
         className={`fixed inset-0 z-0 transition-opacity duration-700 ${isLoaded ? "opacity-100" : "opacity-0"}`}
@@ -182,61 +187,65 @@ export default function Index() {
       >
         <Shader className="h-full w-full">
           <Swirl
-            colorA="#1275d8"
-            colorB="#e19136"
-            speed={0.8}
-            detail={0.8}
-            blend={50}
-            coarseX={40}
-            coarseY={40}
-            mediumX={40}
-            mediumY={40}
-            fineX={40}
-            fineY={40}
+            colorA="#d4c5a9"
+            colorB="#2d5a3d"
+            speed={0.4}
+            detail={0.6}
+            blend={60}
+            coarseX={30}
+            coarseY={30}
+            mediumX={35}
+            mediumY={35}
+            fineX={25}
+            fineY={25}
           />
           <ChromaFlow
-            baseColor="#0066ff"
-            upColor="#0066ff"
-            downColor="#d1d1d1"
-            leftColor="#e19136"
-            rightColor="#e19136"
-            intensity={0.9}
-            radius={1.8}
-            momentum={25}
+            baseColor="#e8dcc8"
+            upColor="#c8b89a"
+            downColor="#2d5a3d"
+            leftColor="#e8dcc8"
+            rightColor="#b5a88a"
+            intensity={0.7}
+            radius={1.6}
+            momentum={20}
             maskType="alpha"
-            opacity={0.97}
+            opacity={0.92}
           />
         </Shader>
-        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute inset-0 bg-background/30" />
       </div>
 
+      {/* Navigation */}
       <nav
-        className={`fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-6 py-6 transition-opacity duration-700 md:px-12 ${
+        className={`fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-6 py-5 transition-opacity duration-700 md:px-12 ${
           isLoaded ? "opacity-100" : "opacity-0"
         }`}
       >
         <button
           onClick={() => scrollToSection(0)}
-          className="flex items-center gap-2 transition-transform hover:scale-105"
+          className="flex items-center gap-3 transition-transform hover:scale-105"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-foreground/15 backdrop-blur-md transition-all duration-300 hover:scale-110 hover:bg-foreground/25">
-            <span className="font-sans text-xl font-bold text-foreground">F</span>
+          <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-foreground/10 backdrop-blur-md border border-foreground/15 transition-all duration-300 hover:bg-foreground/20">
+            <span className="font-serif text-lg font-semibold text-foreground">С</span>
           </div>
-          <span className="font-sans text-xl font-semibold tracking-tight text-foreground">Flowrise</span>
+          <div className="flex flex-col leading-none">
+            <span className="font-serif text-base font-medium tracking-wide text-foreground">Смысл в Строках</span>
+            <span className="font-mono text-[10px] text-foreground/50 tracking-widest uppercase">Книжный магазин</span>
+          </div>
         </button>
 
         <div className="hidden items-center gap-8 md:flex">
-          {["Главная", "Работы", "Услуги", "О нас", "Контакты"].map((item, index) => (
+          {navItems.map((item, index) => (
             <button
               key={item}
               onClick={() => scrollToSection(index)}
               className={`group relative font-sans text-sm font-medium transition-colors ${
-                currentSection === index ? "text-foreground" : "text-foreground/80 hover:text-foreground"
+                currentSection === index ? "text-foreground" : "text-foreground/70 hover:text-foreground"
               }`}
             >
               {item}
               <span
-                className={`absolute -bottom-1 left-0 h-px bg-foreground transition-all duration-300 ${
+                className={`absolute -bottom-1 left-0 h-px bg-accent transition-all duration-300 ${
                   currentSection === index ? "w-full" : "w-0 group-hover:w-full"
                 }`}
               />
@@ -244,70 +253,134 @@ export default function Index() {
           ))}
         </div>
 
-        <MagneticButton variant="secondary" onClick={() => scrollToSection(4)}>
-          Начать
-        </MagneticButton>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setSearchOpen(!searchOpen)}
+            className="flex h-9 w-9 items-center justify-center rounded-sm bg-foreground/10 backdrop-blur-md border border-foreground/15 transition-all hover:bg-foreground/20"
+          >
+            <Icon name="Search" size={15} />
+          </button>
+          <MagneticButton variant="primary" onClick={() => scrollToSection(1)}>
+            Каталог
+          </MagneticButton>
+        </div>
       </nav>
 
+      {/* Search bar */}
+      {searchOpen && (
+        <div className="fixed left-0 right-0 top-[72px] z-40 px-6 md:px-12">
+          <div className="mx-auto max-w-2xl">
+            <div className="flex items-center gap-3 rounded-sm border border-foreground/20 bg-background/90 backdrop-blur-md px-4 py-3">
+              <Icon name="Search" size={16} className="text-foreground/50" />
+              <input
+                autoFocus
+                type="text"
+                placeholder="Поиск книг, авторов, жанров..."
+                className="flex-1 bg-transparent text-sm text-foreground placeholder:text-foreground/40 focus:outline-none"
+              />
+              <button onClick={() => setSearchOpen(false)}>
+                <Icon name="X" size={14} className="text-foreground/50 hover:text-foreground" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Horizontal scroll sections */}
       <div
         ref={scrollContainerRef}
         data-scroll-container
-        className={`relative z-10 flex h-screen overflow-x-auto overflow-y-hidden transition-opacity duration-700 ${
-          isLoaded ? "opacity-100" : "opacity-0"
-        }`}
+        className="flex h-screen w-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden scrollbar-none"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
-        {/* Hero Section */}
-        <section className="flex min-h-screen w-screen shrink-0 flex-col justify-end px-6 pb-16 pt-24 md:px-12 md:pb-24">
-          <div className="max-w-3xl">
-            <div className="mb-4 inline-block animate-in fade-in slide-in-from-bottom-4 rounded-full border border-foreground/20 bg-foreground/15 px-4 py-1.5 backdrop-blur-md duration-700">
-              <p className="font-mono text-xs text-foreground/90">Современные технологии</p>
-            </div>
-            <h1 className="mb-6 animate-in fade-in slide-in-from-bottom-8 font-sans text-6xl font-light leading-[1.1] tracking-tight text-foreground duration-1000 md:text-7xl lg:text-8xl">
-              <span className="text-balance">
-                Цифровое будущее
-              </span>
-            </h1>
-            <p className="mb-8 max-w-xl animate-in fade-in slide-in-from-bottom-4 text-lg leading-relaxed text-foreground/90 duration-1000 delay-200 md:text-xl">
-              <span className="text-pretty">
-                Создаем современные веб-приложения и цифровые продукты, которые помогают бизнесу расти и развиваться.
-              </span>
-            </p>
-            <div className="flex animate-in fade-in slide-in-from-bottom-4 flex-col gap-4 duration-1000 delay-300 sm:flex-row sm:items-center">
-              <MagneticButton
-                size="lg"
-                variant="primary"
-                onClick={() => scrollToSection(4)}
-              >
-                Обсудить проект
-              </MagneticButton>
-              <MagneticButton size="lg" variant="secondary" onClick={() => scrollToSection(2)}>
-                Наши услуги
-              </MagneticButton>
-            </div>
-          </div>
-
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-in fade-in duration-1000 delay-500">
-            <div className="flex items-center gap-2">
-              <p className="font-mono text-xs text-foreground/80">Листайте вправо</p>
-              <div className="flex h-6 w-12 items-center justify-center rounded-full border border-foreground/20 bg-foreground/15 backdrop-blur-md">
-                <div className="h-2 w-2 animate-pulse rounded-full bg-foreground/80" />
+        {/* HERO SECTION */}
+        <section className="flex h-screen w-screen shrink-0 snap-start items-center px-6 pt-24 md:px-12 md:pt-0 lg:px-16">
+          <div
+            className={`mx-auto w-full max-w-7xl transition-all duration-1000 ${
+              isLoaded ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+            }`}
+          >
+            <div className="max-w-3xl">
+              <p className="mb-4 font-mono text-xs tracking-[0.25em] uppercase text-foreground/50">
+                Пространство осознанного чтения
+              </p>
+              <h1 className="mb-6 font-serif text-5xl font-light leading-[1.08] tracking-tight text-foreground md:text-7xl lg:text-8xl">
+                Книги,
+                <br />
+                которые
+                <br />
+                <span className="italic text-foreground/40">меняют</span>
+              </h1>
+              <p className="mb-10 max-w-lg text-base leading-relaxed text-foreground/70 md:text-lg">
+                Мы собираем только то, что стоит вашего времени — литература, которая открывает новые горизонты мышления, чувства и понимания мира.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <MagneticButton variant="primary" size="lg" onClick={() => scrollToSection(1)}>
+                  Смотреть каталог
+                </MagneticButton>
+                <MagneticButton variant="secondary" size="lg" onClick={() => scrollToSection(2)}>
+                  Подборки по настроению
+                </MagneticButton>
               </div>
+            </div>
+
+            {/* Floating book stats */}
+            <div
+              className={`mt-12 flex gap-8 md:mt-16 md:gap-16 transition-all duration-1000 delay-300 ${
+                isLoaded ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+              }`}
+            >
+              {[
+                { value: "4 200+", label: "книг в каталоге" },
+                { value: "320", label: "новинок в месяц" },
+                { value: "12", label: "жанров и категорий" },
+              ].map((s) => (
+                <div key={s.label} className="border-l border-foreground/20 pl-4">
+                  <div className="font-serif text-2xl font-light text-foreground md:text-3xl">{s.value}</div>
+                  <div className="font-mono text-xs text-foreground/50">{s.label}</div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
-        <WorkSection />
-        <ServicesSection />
+        {/* CATALOG SECTION */}
+        <CatalogSection scrollToSection={scrollToSection} />
+
+        {/* MOODS SECTION */}
+        <MoodsSection scrollToSection={scrollToSection} />
+
+        {/* ABOUT SECTION */}
         <AboutSection scrollToSection={scrollToSection} />
+
+        {/* CONTACT SECTION */}
         <ContactSection />
       </div>
 
-      <style>{`
-        div::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
+      {/* Section dots */}
+      <div
+        className={`fixed bottom-8 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 transition-opacity duration-700 ${
+          isLoaded ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        {navItems.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => scrollToSection(index)}
+            className={`transition-all duration-300 rounded-full ${
+              currentSection === index
+                ? "w-6 h-1.5 bg-foreground"
+                : "w-1.5 h-1.5 bg-foreground/30 hover:bg-foreground/60"
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* Cart icon */}
+      <button className="fixed bottom-8 right-6 z-50 flex h-10 w-10 items-center justify-center rounded-sm bg-foreground/10 backdrop-blur-md border border-foreground/15 transition-all hover:bg-foreground/20 md:right-12">
+        <Icon name="ShoppingBag" size={16} />
+        <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[10px] text-accent-foreground font-medium">0</span>
+      </button>
     </main>
   )
 }

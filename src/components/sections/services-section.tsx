@@ -1,7 +1,39 @@
 import { useReveal } from "@/hooks/use-reveal"
+import { MagneticButton } from "@/components/magnetic-button"
 
-export function ServicesSection() {
-  const { ref, isVisible } = useReveal(0.3)
+const moods = [
+  {
+    emoji: "🌿",
+    title: "Для тишины",
+    description: "Книги, с которыми хочется замедлиться. Неспешная проза, медитативные эссе, поэзия.",
+    count: "48 книг",
+    direction: "top",
+  },
+  {
+    emoji: "🔥",
+    title: "Изменить взгляд",
+    description: "Нонфикшн и философия, которые переворачивают привычные представления о жизни.",
+    count: "63 книги",
+    direction: "right",
+  },
+  {
+    emoji: "🌙",
+    title: "На одну ночь",
+    description: "Захватывающие романы — невозможно остановиться, пока не перевернёшь последнюю страницу.",
+    count: "71 книга",
+    direction: "left",
+  },
+  {
+    emoji: "🌱",
+    title: "Расти и развиваться",
+    description: "Психология, нейронаука и саморазвитие без мотивационных клише.",
+    count: "55 книг",
+    direction: "bottom",
+  },
+]
+
+export function MoodsSection({ scrollToSection }: { scrollToSection?: (index: number) => void }) {
+  const { ref, isVisible } = useReveal(0.2)
 
   return (
     <section
@@ -10,40 +42,19 @@ export function ServicesSection() {
     >
       <div className="mx-auto w-full max-w-7xl">
         <div
-          className={`mb-12 transition-all duration-700 md:mb-16 ${
+          className={`mb-8 transition-all duration-700 md:mb-12 ${
             isVisible ? "translate-y-0 opacity-100" : "-translate-y-12 opacity-0"
           }`}
         >
-          <h2 className="mb-2 font-sans text-5xl font-light tracking-tight text-foreground md:text-6xl lg:text-7xl">
-            Услуги
+          <h2 className="mb-1 font-serif text-5xl font-light tracking-tight text-foreground md:text-6xl lg:text-7xl">
+            По настроению
           </h2>
-          <p className="font-mono text-sm text-foreground/60 md:text-base">/ Наши компетенции</p>
+          <p className="font-mono text-sm text-foreground/50">/ Найди свою книгу</p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2 md:gap-x-16 md:gap-y-12 lg:gap-x-24">
-          {[
-            {
-              title: "Веб-разработка",
-              description: "Создание современных веб-приложений любой сложности",
-              direction: "top",
-            },
-            {
-              title: "UI/UX Дизайн",
-              description: "Проектирование удобных и красивых интерфейсов",
-              direction: "right",
-            },
-            {
-              title: "Мобильные приложения",
-              description: "Кроссплатформенная разработка для iOS и Android",
-              direction: "left",
-            },
-            {
-              title: "Консалтинг",
-              description: "Техническая экспертиза и стратегическое планирование",
-              direction: "bottom",
-            },
-          ].map((service, i) => (
-            <ServiceCard key={i} service={service} index={i} isVisible={isVisible} />
+        <div className="grid gap-6 md:grid-cols-2 md:gap-x-16 md:gap-y-8 lg:gap-x-24">
+          {moods.map((mood, i) => (
+            <MoodCard key={i} mood={mood} index={i} isVisible={isVisible} scrollToSection={scrollToSection} />
           ))}
         </div>
       </div>
@@ -51,18 +62,20 @@ export function ServicesSection() {
   )
 }
 
-function ServiceCard({
-  service,
+function MoodCard({
+  mood,
   index,
   isVisible,
+  scrollToSection,
 }: {
-  service: { title: string; description: string; direction: string }
+  mood: typeof moods[0]
   index: number
   isVisible: boolean
+  scrollToSection?: (index: number) => void
 }) {
   const getRevealClass = () => {
     if (!isVisible) {
-      switch (service.direction) {
+      switch (mood.direction) {
         case "left":
           return "-translate-x-16 opacity-0"
         case "right":
@@ -81,16 +94,21 @@ function ServiceCard({
   return (
     <div
       className={`group transition-all duration-700 ${getRevealClass()}`}
-      style={{
-        transitionDelay: `${index * 150}ms`,
-      }}
+      style={{ transitionDelay: `${index * 120}ms` }}
     >
       <div className="mb-3 flex items-center gap-3">
-        <div className="h-px w-8 bg-foreground/30 transition-all duration-300 group-hover:w-12 group-hover:bg-foreground/50" />
-        <span className="font-mono text-xs text-foreground/60">0{index + 1}</span>
+        <div className="h-px w-8 bg-foreground/25 transition-all duration-300 group-hover:w-12 group-hover:bg-accent/60" />
+        <span className="text-base">{mood.emoji}</span>
+        <span className="font-mono text-xs text-foreground/45">{mood.count}</span>
       </div>
-      <h3 className="mb-2 font-sans text-2xl font-light text-foreground md:text-3xl">{service.title}</h3>
-      <p className="max-w-sm text-sm leading-relaxed text-foreground/80 md:text-base">{service.description}</p>
+      <h3 className="mb-2 font-serif text-2xl font-light text-foreground md:text-3xl">{mood.title}</h3>
+      <p className="max-w-sm text-sm leading-relaxed text-foreground/65 md:text-base">{mood.description}</p>
+      <button
+        onClick={() => scrollToSection?.(1)}
+        className="mt-3 font-mono text-xs text-accent/70 underline-offset-4 hover:text-accent hover:underline transition-colors"
+      >
+        Смотреть подборку →
+      </button>
     </div>
   )
 }
