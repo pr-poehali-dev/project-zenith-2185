@@ -11,13 +11,48 @@ import Icon from "@/components/ui/icon"
 
 function Logo({ onClick }: { onClick: () => void }) {
   return (
-    <button onClick={onClick} className="transition-opacity hover:opacity-80">
-      <img
-        src="https://cdn.poehali.dev/projects/8a534957-7167-4774-95d7-f107da00a0e4/bucket/b95091c3-24d0-43f5-80b1-1b2ccdf734bf.png"
-        alt="Смысл в Строках"
-        className="h-10 w-auto object-contain md:h-12"
-        style={{ maxWidth: "220px" }}
-      />
+    <button onClick={onClick} className="group flex items-center gap-2.5 transition-opacity hover:opacity-75">
+      {/* Знак — открытая книга с засечкой */}
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+        {/* Левая страница */}
+        <path
+          d="M16 8 C13 7 9 7.5 6 9 L6 24 C9 22.5 13 22 16 23 L16 8Z"
+          fill="currentColor"
+          fillOpacity="0.13"
+          stroke="currentColor"
+          strokeOpacity="0.55"
+          strokeWidth="1.1"
+          strokeLinejoin="round"
+        />
+        {/* Правая страница */}
+        <path
+          d="M16 8 C19 7 23 7.5 26 9 L26 24 C23 22.5 19 22 16 23 L16 8Z"
+          fill="currentColor"
+          fillOpacity="0.08"
+          stroke="currentColor"
+          strokeOpacity="0.38"
+          strokeWidth="1.1"
+          strokeLinejoin="round"
+        />
+        {/* Корешок */}
+        <line x1="16" y1="8" x2="16" y2="23" stroke="currentColor" strokeOpacity="0.45" strokeWidth="1.2"/>
+        {/* Строки на левой */}
+        <line x1="8.5" y1="13" x2="14" y2="12.2" stroke="currentColor" strokeOpacity="0.4" strokeWidth="0.9" strokeLinecap="round"/>
+        <line x1="8.5" y1="16" x2="14" y2="15.3" stroke="currentColor" strokeOpacity="0.4" strokeWidth="0.9" strokeLinecap="round"/>
+        <line x1="8.5" y1="19" x2="12.5" y2="18.5" stroke="currentColor" strokeOpacity="0.3" strokeWidth="0.9" strokeLinecap="round"/>
+        {/* Акцентный штрих — закладка */}
+        <path d="M22 7.5 L22 13 L20 11.5 L18 13 L18 7.5Z" fill="currentColor" fillOpacity="0.45"/>
+      </svg>
+
+      {/* Текст */}
+      <div className="flex flex-col leading-none">
+        <span className="font-serif text-[15px] font-medium tracking-[0.01em] text-foreground">
+          Смысл в Строках
+        </span>
+        <span className="mt-[2px] font-mono text-[9px] tracking-[0.22em] text-foreground/42 uppercase">
+          Книжный магазин
+        </span>
+      </div>
     </button>
   )
 }
