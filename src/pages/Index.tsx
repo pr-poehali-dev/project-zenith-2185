@@ -11,21 +11,13 @@ import Icon from "@/components/ui/icon"
 
 function Logo({ onClick }: { onClick: () => void }) {
   return (
-    <button onClick={onClick} className="flex items-center gap-3 transition-transform hover:scale-105">
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="36" height="36" rx="4" fill="currentColor" fillOpacity="0.1" stroke="currentColor" strokeOpacity="0.18" strokeWidth="1"/>
-        <rect x="8" y="9" width="12" height="16" rx="1.5" fill="none" stroke="currentColor" strokeOpacity="0.7" strokeWidth="1.4"/>
-        <rect x="11" y="9" width="14" height="16" rx="1.5" fill="none" stroke="currentColor" strokeOpacity="0.45" strokeWidth="1.4"/>
-        <line x1="14" y1="13" x2="21" y2="13" stroke="currentColor" strokeOpacity="0.55" strokeWidth="1"/>
-        <line x1="14" y1="16" x2="21" y2="16" stroke="currentColor" strokeOpacity="0.55" strokeWidth="1"/>
-        <line x1="14" y1="19" x2="18" y2="19" stroke="currentColor" strokeOpacity="0.55" strokeWidth="1"/>
-        <circle cx="26" cy="24" r="5" fill="currentColor" fillOpacity="0.12" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.2"/>
-        <line x1="29.5" y1="27.5" x2="32" y2="30" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.5" strokeLinecap="round"/>
-      </svg>
-      <div className="flex flex-col leading-none">
-        <span className="font-serif text-base font-semibold tracking-wide text-foreground">Смысл в Строках</span>
-        <span className="font-mono text-[9px] text-foreground/45 tracking-[0.18em] uppercase">Книжный магазин</span>
-      </div>
+    <button onClick={onClick} className="transition-opacity hover:opacity-80">
+      <img
+        src="https://cdn.poehali.dev/projects/8a534957-7167-4774-95d7-f107da00a0e4/bucket/b95091c3-24d0-43f5-80b1-1b2ccdf734bf.png"
+        alt="Смысл в Строках"
+        className="h-10 w-auto object-contain md:h-12"
+        style={{ maxWidth: "220px" }}
+      />
     </button>
   )
 }
