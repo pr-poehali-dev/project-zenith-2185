@@ -5,29 +5,43 @@ const moods = [
   {
     emoji: "🌿",
     title: "Для тишины",
-    description: "Книги, с которыми хочется замедлиться. Неспешная проза, медитативные эссе, поэзия.",
+    description: "Неспешная проза, медитативные эссе, поэзия — книги, с которыми хочется замедлиться и побыть наедине с собой.",
     count: "48 книг",
     direction: "top",
   },
   {
     emoji: "🔥",
     title: "Изменить взгляд",
-    description: "Нонфикшн и философия, которые переворачивают привычные представления о жизни.",
+    description: "Нонфикшн и философия, которые переворачивают привычные представления о жизни и заставляют думать иначе.",
     count: "63 книги",
     direction: "right",
   },
   {
     emoji: "🌙",
     title: "На одну ночь",
-    description: "Захватывающие романы — невозможно остановиться, пока не перевернёшь последнюю страницу.",
+    description: "Захватывающие романы и детективы — невозможно остановиться, пока не перевернёшь последнюю страницу.",
     count: "71 книга",
     direction: "left",
   },
   {
     emoji: "🌱",
     title: "Расти и развиваться",
-    description: "Психология, нейронаука и саморазвитие без мотивационных клише.",
+    description: "Психология, нейронаука и саморазвитие без мотивационных клише — только честные знания и реальные практики.",
     count: "55 книг",
+    direction: "bottom",
+  },
+  {
+    emoji: "🌍",
+    title: "Другие голоса",
+    description: "Литература со всего мира в переводах наших редакторов. Африка, Латинская Америка, Азия — неизведанные авторы.",
+    count: "37 книг",
+    direction: "top",
+  },
+  {
+    emoji: "👶",
+    title: "Детям с умом",
+    description: "Книги для детей, которые развивают воображение и эмпатию. Отобраны педагогами и детскими психологами.",
+    count: "92 книги",
     direction: "bottom",
   },
 ]
@@ -38,21 +52,17 @@ export function MoodsSection({ scrollToSection }: { scrollToSection?: (index: nu
   return (
     <section
       ref={ref}
-      className="flex h-screen w-screen shrink-0 snap-start items-center px-6 pt-20 md:px-12 md:pt-0 lg:px-16"
+      className="flex h-screen w-screen shrink-0 snap-start flex-col justify-center px-6 pt-20 md:px-12 md:pt-0 lg:px-20"
     >
       <div className="mx-auto w-full max-w-7xl">
-        <div
-          className={`mb-8 transition-all duration-700 md:mb-12 ${
-            isVisible ? "translate-y-0 opacity-100" : "-translate-y-12 opacity-0"
-          }`}
-        >
-          <h2 className="mb-1 font-serif text-5xl font-light tracking-tight text-foreground md:text-6xl lg:text-7xl">
+        <div className={`mb-8 transition-all duration-700 ${isVisible ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"}`}>
+          <h2 className="mb-1 font-serif text-5xl font-light tracking-tight text-foreground md:text-6xl">
             По настроению
           </h2>
-          <p className="font-mono text-sm text-foreground/50">/ Найди свою книгу</p>
+          <p className="font-mono text-sm text-foreground/45">/ Найди свою книгу прямо сейчас</p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 md:gap-x-16 md:gap-y-8 lg:gap-x-24">
+        <div className="grid grid-cols-2 gap-5 md:grid-cols-3 md:gap-x-14 md:gap-y-7">
           {moods.map((mood, i) => (
             <MoodCard key={i} mood={mood} index={i} isVisible={isVisible} scrollToSection={scrollToSection} />
           ))}
@@ -73,39 +83,28 @@ function MoodCard({
   isVisible: boolean
   scrollToSection?: (index: number) => void
 }) {
-  const getRevealClass = () => {
-    if (!isVisible) {
-      switch (mood.direction) {
-        case "left":
-          return "-translate-x-16 opacity-0"
-        case "right":
-          return "translate-x-16 opacity-0"
-        case "top":
-          return "-translate-y-16 opacity-0"
-        case "bottom":
-          return "translate-y-16 opacity-0"
-        default:
-          return "translate-y-12 opacity-0"
-      }
-    }
-    return "translate-x-0 translate-y-0 opacity-100"
-  }
+  const revealClass = !isVisible
+    ? mood.direction === "left" ? "-translate-x-12 opacity-0"
+      : mood.direction === "right" ? "translate-x-12 opacity-0"
+      : mood.direction === "top" ? "-translate-y-10 opacity-0"
+      : "translate-y-10 opacity-0"
+    : "translate-x-0 translate-y-0 opacity-100"
 
   return (
     <div
-      className={`group transition-all duration-700 ${getRevealClass()}`}
-      style={{ transitionDelay: `${index * 120}ms` }}
+      className={`group transition-all duration-700 ${revealClass}`}
+      style={{ transitionDelay: `${index * 90}ms` }}
     >
-      <div className="mb-3 flex items-center gap-3">
-        <div className="h-px w-8 bg-foreground/25 transition-all duration-300 group-hover:w-12 group-hover:bg-accent/60" />
-        <span className="text-base">{mood.emoji}</span>
-        <span className="font-mono text-xs text-foreground/45">{mood.count}</span>
+      <div className="mb-2 flex items-center gap-2.5">
+        <div className="h-px w-6 bg-foreground/20 transition-all duration-300 group-hover:w-10 group-hover:bg-accent/50" />
+        <span className="text-sm">{mood.emoji}</span>
+        <span className="font-mono text-[10px] text-foreground/40">{mood.count}</span>
       </div>
-      <h3 className="mb-2 font-serif text-2xl font-light text-foreground md:text-3xl">{mood.title}</h3>
-      <p className="max-w-sm text-sm leading-relaxed text-foreground/65 md:text-base">{mood.description}</p>
+      <h3 className="mb-1.5 font-serif text-xl font-light text-foreground md:text-2xl">{mood.title}</h3>
+      <p className="mb-2 text-[13px] leading-relaxed text-foreground/55 md:text-sm">{mood.description}</p>
       <button
         onClick={() => scrollToSection?.(1)}
-        className="mt-3 font-mono text-xs text-accent/70 underline-offset-4 hover:text-accent hover:underline transition-colors"
+        className="font-mono text-[11px] text-accent/65 underline-offset-3 transition-colors hover:text-accent hover:underline"
       >
         Смотреть подборку →
       </button>
