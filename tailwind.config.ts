@@ -18,9 +18,9 @@ export default {
 			}
 		},
 		fontFamily: {
-			sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
-			serif: ['Playfair Display', 'Georgia', 'Times New Roman', 'serif'],
-			mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+			sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+			serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+			display: ['Cormorant Garamond', 'Georgia', 'serif'],
 		},
 		extend: {
 			colors: {
